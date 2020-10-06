@@ -56,14 +56,14 @@ public class TaskListControllerUnitTest {
 
     @Test
     void createTest() {
-        when(this.service.createClub(testTasklist))
+        when(this.service.create(testTasklist))
             .thenReturn(this.tasklistDTO);
         
-        assertThat(new ResponseEntity<ClubDTO>(this.tasklistDTO, HttpStatus.CREATED))
+        assertThat(new ResponseEntity<TaskListDTO>(this.tasklistDTO, HttpStatus.CREATED))
                 .isEqualTo(this.controller.create(testTasklist));
         
         verify(this.service, times(1))
-            .createClub(this.testTasklist);
+            .create(this.testTasklist);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TaskListControllerUnitTest {
         when(this.service.readOne(this.id))
             .thenReturn(this.tasklistDTO);
         
-        assertThat(new ResponseEntity<ClubDTO>(this.tasklistDTO, HttpStatus.OK))
+        assertThat(new ResponseEntity<TaskListDTO>(this.tasklistDTO, HttpStatus.OK))
                 .isEqualTo(this.controller.readOne(this.id));
         
         verify(this.service, times(1))
@@ -80,33 +80,33 @@ public class TaskListControllerUnitTest {
 
     @Test
     void readAllClubsTest() {
-        when(service.readAllClubs())
+        when(service.readAll())
             .thenReturn(this.tasklists
                     .stream()
                     .map(this::mapToDTO)
                     .collect(Collectors.toList()));
         
-        assertThat(this.controller.readAllClubs().getBody()
+        assertThat(this.controller.readAll().getBody()
                 .isEmpty()).isFalse();
         
         verify(this.service, times(1))
-            .readAllClubs();
+            .readAll();
     }
 
     @Test
     void updateTest() {
         // given
-        ClubDTO newClub= new ClubDTO(null, "BVB", 250000000L, null);
-        ClubDTO updatedClub= new ClubDTO(this.id, newClub.getName(), newClub.getValue(), null);
+        TaskListDTO newTaskList= new TaskListDTO(null, "BVB", null);
+        TaskListDTO updatedTaskList= new TaskListDTO(this.id, newTaskList.getName(), null);
 
-        when(this.service.update(newClub, this.id))
-            .thenReturn(updatedClub);
+        when(this.service.update(newTaskList, this.id))
+            .thenReturn(updatedTaskList);
         
-        assertThat(new ResponseEntity<ClubDTO>(updatedClub, HttpStatus.ACCEPTED))
-                .isEqualTo(this.controller.update(this.id, newClub));
+        assertThat(new ResponseEntity<TaskListDTO>(updatedTaskList, HttpStatus.ACCEPTED))
+                .isEqualTo(this.controller.update(this.id, newTaskList));
         
         verify(this.service, times(1))
-            .update(newClub, this.id);
+            .update(newTaskList, this.id);
     }
     
     @Test
