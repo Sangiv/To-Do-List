@@ -79,7 +79,7 @@ class TaskListServiceUnitTest {
 
     @Test
     void readAllTest() {
-        // findAll() returns a list, which is handy, since we already have clubs spun up.
+
         when(this.repo.findAll()).thenReturn(this.tasklists);
 
         when(this.modelMapper.map(this.testTasklistWithId, TaskListDTO.class)).thenReturn(this.tasklistDTO);
