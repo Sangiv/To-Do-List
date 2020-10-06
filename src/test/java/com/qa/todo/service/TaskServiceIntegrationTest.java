@@ -52,7 +52,7 @@ class TaskServiceIntegrationTest {
     @Test
     void testCreate() {
         assertThat(this.testTaskDTO)
-            .isEqualTo(this.service.createPlayer(testTask));
+            .isEqualTo(this.service.create(testTask));
     }
 
     @Test
@@ -63,20 +63,18 @@ class TaskServiceIntegrationTest {
 
     @Test
     void testReadAll() {
-        // check this one out with a breakpoint and running it in debug mode
-        // so you can see the stream happening
-        assertThat(this.service.readAllPlayers())
+        assertThat(this.service.readAll())
                 .isEqualTo(Stream.of(this.testTaskDTO)
                         .collect(Collectors.toList()));
     }
 
     @Test
     void testUpdate() {
-        PlayerDTO newPlayer = new PlayerDTO(null, "Messi", "RW");
-        PlayerDTO updatedPlayer = new PlayerDTO(this.id, newPlayer.getName(), newPlayer.getPosition());
+        TaskDTO newTask = new TaskDTO(null, "BVB");
+        TaskDTO updatedTask = new TaskDTO(this.id, newTask.getName());
 
-        assertThat(updatedPlayer)
-            .isEqualTo(this.service.update(newPlayer, this.id));
+        assertThat(updatedTask)
+            .isEqualTo(this.service.update(newTask, this.id));
     }
 
     @Test
