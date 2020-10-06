@@ -66,7 +66,7 @@ public class TaskControllerIntegrationTest {
     @Test
     void testCreate() throws Exception {
         this.mock
-                .perform(request(HttpMethod.POST, "/player/create").contentType(MediaType.APPLICATION_JSON)
+                .perform(request(HttpMethod.POST, "/task/create").contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(testTask))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -74,42 +74,42 @@ public class TaskControllerIntegrationTest {
     }
 
     @Test
-    void testRead() throws Exception {
-        this.mock.perform(request(HttpMethod.GET, "/player/readOne/" + this.id).accept(MediaType.APPLICATION_JSON))
+    void testReadOne() throws Exception {
+        this.mock.perform(request(HttpMethod.GET, "/task/readOne/" + this.id).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(this.objectMapper.writeValueAsString(this.taskDTO)));
     }
 
     @Test
     void testReadAll() throws Exception {
-        List<PlayerDTO> players = new ArrayList<>();
-        players.add(this.taskDTO);
+        List<TaskDTO> tasks = new ArrayList<>();
+        tasks.add(this.taskDTO);
 
         String content = this.mock
-                .perform(request(HttpMethod.GET, "/player/readAll").accept(MediaType.APPLICATION_JSON))
+                .perform(request(HttpMethod.GET, "/task/readAll").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-        assertEquals(this.objectMapper.writeValueAsString(players), content);
+        assertEquals(this.objectMapper.writeValueAsString(tasks), content);
     }
 
     @Test
     void testUpdate() throws Exception {
-        PlayerDTO newPlayer = new PlayerDTO(null, "Messi", "RW");
-        Player updatedPlayer = new Player(newPlayer.getName(), newPlayer.getPosition());
-        updatedPlayer.setId(this.id);
+        TaskDTO newTask = new TaskDTO(null, "Arsenal");
+        Task updatedTask = new Task(newTask.getName());
+        updatedTask.setId(this.id);
 
         String result = this.mock
-                .perform(request(HttpMethod.PUT, "/player/update/" + this.id).accept(MediaType.APPLICATION_JSON)
+                .perform(request(HttpMethod.PUT, "/task/update/" + this.id).accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(newPlayer)))
+                        .content(this.objectMapper.writeValueAsString(newTask)))
                 .andExpect(status().isAccepted()).andReturn().getResponse().getContentAsString();
 
-        assertEquals(this.objectMapper.writeValueAsString(this.mapToDTO(updatedPlayer)), result);
+        assertEquals(this.objectMapper.writeValueAsString(this.mapToDTO(updatedTask)), result);
     }
 
     @Test
     void testDelete() throws Exception {
-        this.mock.perform(request(HttpMethod.DELETE, "/player/delete/" + this.id)).andExpect(status().isNoContent());
+        this.mock.perform(request(HttpMethod.DELETE, "/task/delete/" + this.id)).andExpect(status().isNoContent());
     }
 
 }
