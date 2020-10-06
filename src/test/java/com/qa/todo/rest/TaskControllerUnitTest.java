@@ -18,57 +18,61 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.qa.todo.dto.TaskDTO;
+import com.qa.todo.persistance.domain.Task;
+import com.qa.todo.service.TaskService;
+
 
 @SpringBootTest
-public class PlayerControllerUnitTest {
+public class TaskControllerUnitTest {
 
 	@Autowired
-	private PlayerController controller;
+	private TaskController controller;
 	
 	@Autowired
 	private ModelMapper mapper;
 	
 	@MockBean
-    private PlayerService service;
+    private TaskService service;
 
-    private List<Player> players;
-    private Player testPlayer;
-    private Player testPlayerWithID;
-    private PlayerDTO playerDTO;
+    private List<Task> tasks;
+    private Task testTask;
+    private Task testTaskWithID;
+    private TaskDTO taskDTO;
     private final Long id = 1L;
 
-    private PlayerDTO mapToDTO(Player player) {
-        return this.mapper.map(player, PlayerDTO.class);
+    private TaskDTO mapToDTO(Task task) {
+        return this.mapper.map(task, TaskDTO.class);
     }
 
     @BeforeEach
     void init() {
-        this.players = new ArrayList<>();
-        this.testPlayer = new Player("Ronaldo", "ST");
-        this.testPlayerWithID = new Player(testPlayer.getName(), testPlayer.getPosition());
-        this.testPlayerWithID.setId(id);
-        this.players.add(testPlayerWithID);
-        this.playerDTO = this.mapToDTO(testPlayerWithID);
+        this.tasks = new ArrayList<>();
+        this.testTask = new Task("Ronaldo");
+        this.testTaskWithID = new Task(testTask.getName());
+        this.testTaskWithID.setId(id);
+        this.tasks.add(testTaskWithID);
+        this.taskDTO = this.mapToDTO(testTaskWithID);
     }
 
     @Test
     void createTest() {
-        when(this.service.createPlayer(testPlayer))
-            .thenReturn(this.playerDTO);
+        when(this.service.create(testTask))
+            .thenReturn(this.taskDTO);
         
-        assertThat(new ResponseEntity<PlayerDTO>(this.playerDTO, HttpStatus.CREATED))
-                .isEqualTo(this.controller.create(testPlayer));
+        assertThat(new ResponseEntity<PlayerDTO>(this.taskDTO, HttpStatus.CREATED))
+                .isEqualTo(this.controller.create(testTask));
         
         verify(this.service, times(1))
-            .createPlayer(this.testPlayer);
+            .createPlayer(this.testTask);
     }
 
     @Test
     void readOneTest() {
         when(this.service.readOne(this.id))
-            .thenReturn(this.playerDTO);
+            .thenReturn(this.taskDTO);
         
-        assertThat(new ResponseEntity<PlayerDTO>(this.playerDTO, HttpStatus.OK))
+        assertThat(new ResponseEntity<PlayerDTO>(this.taskDTO, HttpStatus.OK))
                 .isEqualTo(this.controller.readOne(this.id));
         
         verify(this.service, times(1))
