@@ -12,9 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.qa.todo.dto.TaskDTO;
 import com.qa.todo.dto.TaskListDTO;
-import com.qa.todo.persistance.domain.Task;
 import com.qa.todo.persistance.domain.TaskList;
 import com.qa.todo.persistance.repository.TaskListRepository;
 
@@ -54,7 +52,7 @@ class TaskListServiceIntegrationTest {
     @Test
     void testCreate() {
         assertThat(this.testTasklistDTO)
-            .isEqualTo(this.service.createClub(testTasklist));
+            .isEqualTo(this.service.create(testTasklist));
     }
 
     @Test
@@ -65,20 +63,18 @@ class TaskListServiceIntegrationTest {
 
     @Test
     void testReadAll() {
-        // check this one out with a breakpoint and running it in debug mode
-        // so you can see the stream happening
-        assertThat(this.service.readAllClubs())
+        assertThat(this.service.readAll())
                 .isEqualTo(Stream.of(this.testTasklistDTO)
                         .collect(Collectors.toList()));
     }
 
     @Test
     void testUpdate() {
-        ClubDTO newClub = new ClubDTO(null, "BVB", 250000000L, new ArrayList<>());
-        ClubDTO updatedClub = new ClubDTO(this.id, newClub.getName(), newClub.getValue(), new ArrayList<>());
+        TaskListDTO newTasklist = new TaskListDTO(null, "BVB", new ArrayList<>());
+        TaskListDTO updatedTasklist = new TaskListDTO(this.id, newTasklist.getName(), new ArrayList<>());
 
-        assertThat(updatedClub)
-            .isEqualTo(this.service.update(newClub, this.id));
+        assertThat(updatedTasklist)
+            .isEqualTo(this.service.update(newTasklist, this.id));
     }
 
     @Test
