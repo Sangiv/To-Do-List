@@ -19,6 +19,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qa.todo.dto.TaskDTO;
+import com.qa.todo.persistance.domain.Task;
+import com.qa.todo.persistance.repository.TaskRepository;
 
 
 @SpringBootTest
@@ -29,7 +32,7 @@ public class TaskControllerIntegrationTest {
     private MockMvc mock;
 
     @Autowired
-    private PlayerRepository repo;
+    private TaskRepository repo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -37,52 +40,50 @@ public class TaskControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Player testPlayer;
-    private Player testPlayerWithID;
-    private PlayerDTO playerDTO;
+    private Task testTask; 
+    private Task testTaskWithID;
+    private TaskDTO taskDTO;
 
     private Long id;
     private String testName;
-    private String testPosition;
 
-    private PlayerDTO mapToDTO(Player player) {
-        return this.modelMapper.map(player, PlayerDTO.class);
+    private TaskDTO mapToDTO(Task task) {
+        return this.modelMapper.map(task, TaskDTO.class);
     }
 
     @BeforeEach
     void init() {
         this.repo.deleteAll();
 
-        this.testPlayer = new Player("Ronaldo", "ST");
-        this.testPlayerWithID = this.repo.save(this.testPlayer);
-        this.playerDTO = this.mapToDTO(testPlayerWithID);
+        this.testTask = new Task("Arsenal");
+        this.testTaskWithID = this.repo.save(this.testTask);
+        this.taskDTO = this.mapToDTO(testTaskWithID);
 
-        this.id = this.testPlayerWithID.getId();
-        this.testName = this.testPlayerWithID.getName();
-        this.testPosition= this.testPlayerWithID.getPosition();
+        this.id = this.testTaskWithID.getId();
+        this.testName = this.testTaskWithID.getName();
     }
 
     @Test
     void testCreate() throws Exception {
         this.mock
                 .perform(request(HttpMethod.POST, "/player/create").contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(testPlayer))
+                        .content(this.objectMapper.writeValueAsString(testTask))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(this.objectMapper.writeValueAsString(playerDTO)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(taskDTO)));
     }
 
     @Test
     void testRead() throws Exception {
         this.mock.perform(request(HttpMethod.GET, "/player/readOne/" + this.id).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(this.objectMapper.writeValueAsString(this.playerDTO)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(this.taskDTO)));
     }
 
     @Test
     void testReadAll() throws Exception {
         List<PlayerDTO> players = new ArrayList<>();
-        players.add(this.playerDTO);
+        players.add(this.taskDTO);
 
         String content = this.mock
                 .perform(request(HttpMethod.GET, "/player/readAll").accept(MediaType.APPLICATION_JSON))
