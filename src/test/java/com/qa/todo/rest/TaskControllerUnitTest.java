@@ -60,11 +60,11 @@ public class TaskControllerUnitTest {
         when(this.service.create(testTask))
             .thenReturn(this.taskDTO);
         
-        assertThat(new ResponseEntity<PlayerDTO>(this.taskDTO, HttpStatus.CREATED))
+        assertThat(new ResponseEntity<TaskDTO>(this.taskDTO, HttpStatus.CREATED))
                 .isEqualTo(this.controller.create(testTask));
         
         verify(this.service, times(1))
-            .createPlayer(this.testTask);
+            .create(this.testTask);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class TaskControllerUnitTest {
         when(this.service.readOne(this.id))
             .thenReturn(this.taskDTO);
         
-        assertThat(new ResponseEntity<PlayerDTO>(this.taskDTO, HttpStatus.OK))
+        assertThat(new ResponseEntity<TaskDTO>(this.taskDTO, HttpStatus.OK))
                 .isEqualTo(this.controller.readOne(this.id));
         
         verify(this.service, times(1))
@@ -80,34 +80,34 @@ public class TaskControllerUnitTest {
     }
 
     @Test
-    void readAllPlayersTest() {
-        when(service.readAllPlayers())
-            .thenReturn(this.players
+    void readAllTest() {
+        when(service.readAll())
+            .thenReturn(this.tasks
                     .stream()
                     .map(this::mapToDTO)
                     .collect(Collectors.toList()));
         
-        assertThat(this.controller.readAllPlayers().getBody()
+        assertThat(this.controller.readAll().getBody()
                 .isEmpty()).isFalse();
         
         verify(this.service, times(1))
-            .readAllPlayers();
+            .readAll();
     }
 
     @Test
     void updateTest() {
         // given
-        PlayerDTO newPlayer= new PlayerDTO(null, "Messi", "RW");
-        PlayerDTO updatedPlayer= new PlayerDTO(this.id, newPlayer.getName(), newPlayer.getPosition());
+        TaskDTO newTask= new TaskDTO(null, "Arsenal");
+        TaskDTO updatedTask= new TaskDTO(this.id, newTask.getName());
 
-        when(this.service.update(newPlayer, this.id))
-            .thenReturn(updatedPlayer);
+        when(this.service.update(newTask, this.id))
+            .thenReturn(updatedTask);
         
-        assertThat(new ResponseEntity<PlayerDTO>(updatedPlayer, HttpStatus.ACCEPTED))
-                .isEqualTo(this.controller.update(this.id, newPlayer));
+        assertThat(new ResponseEntity<TaskDTO>(updatedTask, HttpStatus.ACCEPTED))
+                .isEqualTo(this.controller.update(this.id, newTask));
         
         verify(this.service, times(1))
-            .update(newPlayer, this.id);
+            .update(newTask, this.id);
     }
     
     @Test
