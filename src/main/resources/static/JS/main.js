@@ -26,11 +26,14 @@ fetch('http://localhost:8901/tasklist/readAll/')
       for(let todoRecord of todoData) {
           let row = table.insertRow();
           for(values in todoRecord) {
+            if(values === "tasks") {
+              continue
+            } else {
               console.log(todoRecord[values]);
               let cell = row.insertCell()
               let text = document.createTextNode(todoRecord[values]);
               cell.appendChild(text);
-
+            }
           }
           
           let cellView = row.insertCell();
