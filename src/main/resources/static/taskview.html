@@ -4,18 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <title>To-Do-List</title>
+    <title>Task Details</title>
 </head>
 <body>
-    <h1>To-Do-List</h1>
-    <div id="deldiv"></div>
-
-    <table class="table table-dark"></table>
-
-    <a href="createlist.html">
-    <button id="createBtn" class="btn btn-warning">CREATE</button>
+    <div class="container">
+    <a href="index.html">
+        <h1>Task Details: </h1>
     </a>
-<script src="../JS/main.js"></script>
+    <!-- FORM -->
+    <form class="taskForm" method="post" action="index.html" style="align-content: center;" >
+        <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="inputID">Id</label>
+            <input name="id" type="text" class="form-control" disabled id="inputID">
+        </div>
+        <div class="form-group col-md-12">
+            <label for="inputName">Name</label>
+            <input name="name" type="text"  class="form-control" id="inputName">
+        </div>
+        </div>
+        <button type="submit" id="updateBtn" class="btn btn-primary">Update </button>
+        <button type="submit" id="deleteBtn" class="btn btn-danger">Delete </button>
+    </form>
+    <!-- FORM -->   
+    </div>
+    
+
+
+<script src="../JS/tasks.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>

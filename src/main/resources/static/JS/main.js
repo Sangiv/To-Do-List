@@ -14,7 +14,6 @@ fetch('http://localhost:8901/tasklist/readAll/')
         let table = document.querySelector("table");
         let dataHead = Object.keys(todoData[0]);
 
-        // createTableHead(table, dataHead);
         createTableBody(table, todoData);
       });
     }
@@ -22,30 +21,6 @@ fetch('http://localhost:8901/tasklist/readAll/')
   .catch(function(err) {
     console.log('Fetch Error :-S', err);
   });
-
-  function createTableHead(table, dataHead) {
-      let tableHead = table.createTHead();
-      let row = tableHead.insertRow();
-
-      for(let keys of dataHead){
-          let th = document.createElement("th");
-          let text = document.createTextNode(keys);
-          th.appendChild(text);
-          row.appendChild(th);
-      }
-
-      let thView = document.createElement("th");
-      let textView = document.createTextNode("View");
-      thView.appendChild(textView);
-      row.appendChild(thView);
-
-      let thDel = document.createElement("th");
-      let textDel = document.createTextNode("Delete");
-      thDel.appendChild(textDel);
-      row.appendChild(thDel);
-      
-  }
-
 
   function createTableBody(table, todoData) {
       for(let todoRecord of todoData) {
@@ -65,13 +40,39 @@ fetch('http://localhost:8901/tasklist/readAll/')
           viewButton.href = 'record.html?id='+todoRecord.id
           viewButton.appendChild(viewText);
           cellView.appendChild(viewButton);
-
-          let cellDell = row.insertCell();
-          let DelButton = document.createElement("a");
-          let DelText = document.createTextNode("Delete");
-          DelButton.className = "btn btn-danger";
-        //   DelButton.href = `record.html?`
-          DelButton.appendChild(DelText);
-          cellDell.appendChild(DelButton);
+          
+        let cellDell = row.insertCell();
+        let DelButton = document.createElement("a");
+        let DelText = document.createTextNode("Delete");
+        DelButton.className = "btn btn-danger";
+        DelButton.onclick = function(){
+          deltodo(todoRecord.id);
+          return false;
+        };
+        DelButton.appendChild(DelText);
+        cellDell.appendChild(DelButton);
       }
   }
+
+  function deltodo(id){
+    fetch("http://localhost:8901/tasklist/delete/"+id, {
+        method: 'delete',
+        headers: {
+          "Content-type": "application/json"
+        },
+      })
+      .then(function (data) {
+        console.log('Request succeeded with JSON response', data);
+        let deldiv = document.getElementById("deldiv");
+        deldiv.className ="alert alert-danger"
+        deldiv.textContent ="Task List Deleted";
+        window.location.reload();
+        
+      })
+      .catch(function (error) {
+        console.log('Request failed', error);
+        let deldiv = document.getElementById("create");
+        deldiv.className ="alert alert-success"
+        deldiv.textContent ="Error deleting student";
+      });
+}
