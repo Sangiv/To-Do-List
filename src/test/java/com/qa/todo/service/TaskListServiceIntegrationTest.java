@@ -28,13 +28,17 @@ class TaskListServiceIntegrationTest {
     @Autowired
     private TaskListRepository repo;
 
-    @MockBean
+    @Autowired
     private ModelMapper modelMapper;
 
     private TaskList testTasklist;
     private TaskList testTasklistWithId;
     private TaskListDTO testTasklistDTO;
 
+	private TaskListDTO mapToDTO(TaskList tasklist) {
+		return this.modelMapper.map(tasklist, TaskListDTO.class);
+	}
+	
     private Long id;
     private final String name = "Arsenal";
 
@@ -43,14 +47,12 @@ class TaskListServiceIntegrationTest {
         this.repo.deleteAll();
         this.testTasklist = new TaskList(name);
         this.testTasklistWithId = this.repo.save(this.testTasklist);
-        this.testTasklistDTO = modelMapper.map(testTasklistWithId, TaskListDTO.class);
+        this.testTasklistDTO = this.mapToDTO(testTasklistWithId);
         this.id = this.testTasklistWithId.getId();
     }
 
     @Test
     void testCreate() {
-    	
-    	when(this.modelMapper.map(this.testTasklistWithId, TaskListDTO.class)).thenReturn(this.testTasklistDTO);
     	
         assertThat(this.testTasklistDTO)
             .isEqualTo(this.service.create(testTasklist));
@@ -59,16 +61,12 @@ class TaskListServiceIntegrationTest {
     @Test
     void testReadOne() {
     	
-    	when(this.modelMapper.map(this.testTasklistWithId, TaskListDTO.class)).thenReturn(this.testTasklistDTO);
-    	
         assertThat(this.testTasklistDTO)
                 .isEqualTo(this.service.readOne(this.id));
     }
 
     @Test
     void testReadAll() {
-    	
-    	when(this.modelMapper.map(this.testTasklistWithId, TaskListDTO.class)).thenReturn(this.testTasklistDTO);
     	
         assertThat(this.service.readAll())
                 .isEqualTo(Stream.of(this.testTasklistDTO)
@@ -79,9 +77,7 @@ class TaskListServiceIntegrationTest {
     void testUpdate() {
     	
         TaskListDTO newTasklist = new TaskListDTO(null, "BVB", new ArrayList<>());
-        TaskListDTO updatedTasklist = new TaskListDTO(this.id, newTasklist.getName(), new ArrayList<>());
-        
-    	when(this.modelMapper.map(this.testTasklistWithId, TaskListDTO.class)).thenReturn(this.testTasklistDTO);
+        TaskListDTO updatedTasklist = new TaskListDTO(this.id, newTasklist.getName(), newTasklist.getTasks());
 
         assertThat(updatedTasklist)
             .isEqualTo(this.service.update(newTasklist, this.id));

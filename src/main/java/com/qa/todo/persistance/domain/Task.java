@@ -33,12 +33,12 @@ public class Task {
 		@GeneratedValue(strategy = GenerationType.IDENTITY) // Auto incremented
 		private Long id;
 		
-		@Column(name= "tsak_name")
+		@Column(name= "task_name")
 		@NotNull
 		@Size(min= 1, max= 120)
 		private String name;
 		
-		@ManyToOne()
+		@ManyToOne
 		private TaskList tasklist;
 
 		public Task(@NotNull @Size(min = 1, max = 120) String name, TaskList tasklist) {

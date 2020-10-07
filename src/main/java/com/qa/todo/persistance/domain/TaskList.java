@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,7 +40,7 @@ public class TaskList {
 		@Size(min= 1, max= 120)
 		private String name;
 		
-		@OneToMany(mappedBy = "tasklist", cascade = CascadeType.ALL)
+		@OneToMany(mappedBy = "tasklist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 		private List<Task> tasks = new ArrayList<>();
 
 		public TaskList(@NotNull @Size(min = 1, max = 120) String name) {
