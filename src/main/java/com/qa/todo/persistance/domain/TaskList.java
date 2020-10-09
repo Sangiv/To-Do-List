@@ -40,7 +40,8 @@ public class TaskList {
 		@Size(min= 1, max= 120)
 		private String name;
 		
-		@OneToMany(mappedBy = "tasklist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+																	//, fetch = FetchType.EAGER
+		@OneToMany(mappedBy = "tasklist", cascade = CascadeType.ALL)
 		private List<Task> tasks = new ArrayList<>();
 
 		public TaskList(@NotNull @Size(min = 1, max = 120) String name) {
