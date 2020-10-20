@@ -40,7 +40,7 @@ public class UITesting {
     public void testIndexPage() throws InterruptedException {
         driver.get("http://localhost:8901/index.html");
 
-        assertThat("To-Do-List").isEqualTo(driver.getTitle());
+        assertThat(driver.getTitle()).isEqualTo("To-Do-List");
     }
     
     
@@ -51,7 +51,7 @@ public class UITesting {
 //        navigate to create TaskList page
         driver.findElement(By.xpath("/html/body/a")).click();
 
-        assertThat("Create A Task List").isEqualTo(driver.getTitle());
+        assertThat(driver.getTitle()).isEqualTo("Create A Task List");
     }
     
     
